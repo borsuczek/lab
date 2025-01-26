@@ -1,0 +1,27 @@
+name: 184620
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Krok 1: Checkout repozytorium
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Krok 2: Budowanie obrazu Dockera
+      - name: Build Docker image
+        run: |
+          docker build -t dockerimage .
+
+      # Krok 3: Skanowanie obrazu za pomocą Trivy
+      - name: Scan Docker image for vulnerabilities
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: dockerimage
+          format: table
